@@ -31,6 +31,12 @@ SW1(config-if)#switchport access vlan 20
 ```
 The configurations on SW2 will also be the same since the same ports are being connecting over there also. 
 
+<img width="697" height="200" alt="image" src="https://github.com/user-attachments/assets/e8a38d8f-fff6-4fb0-9397-2e7201fd764e" />
+
+This image shows vlan 10 (HR) has the port F0/3 and vlan 20 (IT) has the port F0/4.
+
+
+
 ## STP Root Configurations
 We now will configure which switch will be the primary and secondary roots for each vlan.
 This is important to load balance and have redundancy between switches.
@@ -43,6 +49,9 @@ SW1(config)#spanning-tree vlan 20 root secondary
 
 This would be the same configurations on SW2 except the roots get reversed.
 
+<img width="758" height="410" alt="image" src="https://github.com/user-attachments/assets/12339875-fcad-4ee4-846c-d4991d171d4c" />
+
+From the image, we see that SW1 is the root bridge for vlan 10 and SW2 is the root primary for vlan 20.
 ## Portfast
 
 Portfast is important for STP because it allows end devices (like PCs) to immediately start forwarding traffic
@@ -60,5 +69,21 @@ we can use the same commands on both devices.
 
 __NOTE: If we plan on connecting a switch in place of a PC with portfast enabled, we must turn off portfast or put on bpduguard__
 
+## Trunk Links
+
+We have to establish a trunk link between SW1 and SW2. These trunk links allow for the switches to communicate multiple vlan's on a singular port.
+We will make sure traffic for vlan's 10 and 20 are passed in this trunk link.
+
+Configuring trunk links
+```text
+SW1(config)#int range f0/1-2
+SW1(config)#switchport mode trunk
+SW1(config)#switchport trunk allowed vlan 10,20
+```
+These would be the same configurations for SW2. We should not allow for all vlans to communicate in this trunk as this would cause security concerns.
+
+<img width="588" height="218" alt="image" src="https://github.com/user-attachments/assets/9426329a-f01c-47ed-b7ea-0281834bfb2f" />
+
+From the image, we can see that the trunk between f0/1 and f0/2 are only allowing vlans 10 and 20 to pass through.
 
 
